@@ -1,0 +1,13 @@
+<project name="customcharsetprovider" default="compile" basedir=".">
+	<target name="compile">
+		<delete dir="../build" />
+		<delete file="zosconnectUsernamedCodepage.jar" />
+		<mkdir dir="../build/classes" />
+		<javac srcdir="." destdir="../build/classes" fork="yes" memorymaximumsize="1024M" listfiles="yes" optimize="on" debug="on" source="1.6" target="1.6" />
+		<jar destfile="zosconnectUsernamedCodepage.jar">
+			<fileset dir="../build/classes" />
+			<service type="java.nio.charset.spi.CharsetProvider" provider="com.ibm.proofofconcept.nio.charset.NHCCharsetProvider" />
+		</jar>
+		<delete dir="../build" />
+	</target>
+</project>
