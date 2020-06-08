@@ -18,11 +18,20 @@ public class NHCCharset extends Charset {
 	// characters and bytes.
 	Charset baseCharset;
 
-	char aBig5Char = '\uA470';//<--big5--> 小
-	char bBig5Char = '\uA7B5';//<--big5--> 孝
-	char aUnicodeChar = '\u5C0F';//<--unicode
-	char bUnicodeChar = '\u5B5D';//<--unicode
-	
+	char aBig5Char = '\uA470';// <--big5--> 小
+	char bBig5Char = '\uA7B5';// <--big5--> 孝
+	char aUnicodeChar = '\u5C0F';// <--unicode 小
+	char bUnicodeChar = '\u5B5D';// <--unicode 孝
+	Character[] big5Chars = new Character[] { '\uA470', // <--big5--> 小
+			'\uCE5D'// <--big5--> 垚
+	};
+	Character[] fbig5Chars = new Character[] { '\uA470', // <--big5--> 小
+			'\uA7B5'// <--big5--> facked 垚
+	};
+	Character[] unicodeChars = new Character[] { '\u5C0F', // <--big5--> 小
+			'\u5B5D'// <--big5--> facked 垚 big5-->A7B5 孝
+	};
+
 	/**
 	 * Constructor for the NHC charset. Call the superclass constructor to pass
 	 * along the name(s) we'll be known by. Then save a reference to the delegate
@@ -98,16 +107,13 @@ public class NHCCharset extends Charset {
 				while (cb.hasRemaining()) {
 					// Peek at the character at the current input position
 					char inputChar = cb.charAt(0);
-					if (inputChar == aUnicodeChar) {
-						// Consume this character - i.e. move the position
-						inputChar = cb.get();
-						bb.putChar(aBig5Char);
-					} else if(inputChar == bUnicodeChar) {
-						// Consume this character - i.e. move the position
-						inputChar = cb.get();
-						bb.putChar(bBig5Char);
-					} else {
-						break;
+					for (int i = 0; i < unicodeChars.length; i++) {
+						if (unicodeChars[i] == inputChar) {
+							// Consume this character - i.e. move the position
+							inputChar = cb.get();
+							bb.putChar(big5Chars[i]);
+							break;
+						}
 					}
 				}
 
@@ -155,11 +161,9 @@ public class NHCCharset extends Charset {
 					// Peek at the character at the current input position
 					char inputChar = bb.getChar();
 					bb.mark();
-					if (inputChar == aBig5Char) {
-						cb.put(bUnicodeChar);
-						bb.mark();
-					} else if (inputChar == bBig5Char) {
-						cb.put(aUnicodeChar);
+					int binarySearch = Arrays.binarySearch(big5Chars, inputChar);
+					if (binarySearch > 0) {
+						cb.put(unicodeChars[binarySearch]);
 						bb.mark();
 					} else {
 						// We can't decode this character, so give up and let
