@@ -73,13 +73,21 @@ chmod -R 750 ./resources
 
 **NOTE**: Change the hostname and portnum to the actual hostname and port number of the CICS region where the CICS sample program (CLAIMCI0) was installed. A sample server.xml is included in the package. If you want to use the sample server.xml file then upload it to z/OS in binary mode to keep the contents in ASCII format.
 
+## Extending JRE to support custom character encoding
+If you want to specify your custom CCSID in z/OS Conenct EE, you must extend the Java™ Runtime Environment (JRE) to support your custom character encoding with your own CharsetProvider and Charset classes. 
+
+Sample CharsetProvider and Charset class implementations(NHCCharsetProvider.java, NHCCharset.java) are included in the package. They use ~
+
+If you want to build your own custom CharsetProvider JAR file, follow the steps described in the [How to specify a custom CCSID for a CICS service](https://www-03preprod.ibm.com/support/knowledgecenter/SS4SVW_E29022/designing/specify_custom_ccsid.html) section of the z/OS Connect EE documentation in the IBM Knowledge Center. 
+
 ## Deploying the custom CharsetProvideer JAR file to JRE
+A sample JAR file supporting CCSID() is provided in this scenario. 
 1. Copy the JAR file(zosconnectUsernamedCodepage.jar) to the z/OS Connect EE runtime JRE extend directory, for example, ```$ZCEERUNTIME_JRE_Location/jre/lib/ext```.
 2. Depending on which toolkit that you use to generate the service archive (.sar), copy the JAR file to the corresponding JRE extend directory.
     - If you use the API toolkit, ensure the JAR file is deployed to the API toolkit JRE extend directory, for example, `$ZOSExplorer_Install_Location/jdk/jre/lib/ext`.
     - If you use the build toolkit, ensure the JAR file is deployed to the build toolkit JRE extend directory, for example, `$BUILDTOOLKIT_JRE_Location/jre/lib/ext`.
 
-## Generating and Deploying .sar file to z/OS Connect EE Server.
+## Generating and Deploying .sar file to z/OS Connect EE Server
 This repository includes the sample API (cicsClaimsAPI.aar) and service (CICSClaimsService.sar) archive files.
 Follow the steps below to deploy the included archive files:
 - To deploy the sample service (CICSClaimsService.sar), follow the steps described in the Automated service archive management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
