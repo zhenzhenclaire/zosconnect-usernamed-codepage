@@ -1,2 +1,88 @@
-# zosconnect-usernamed-codepage
-Contains a sample CICS COBOL application that uses the API Requester function to use usernamed codepage for z/OS Connect EE. 
+# Sample application for Specifying a custom CCSID for a CICS service
+
+This repository contains a sample CICS COBOL application that uses a custom code page when creating a CICS service for z/OS Connect EE. 
+
+## Introduction
+When you create a CICS service, you must specify the coded character set identifier (CCSID) to encode character data in COMMAREA and container application data structures at run time. In most cases, you can refer to Coded character set identifiers for the CCSIDs that are supported in z/OS Connect EE by default. But what if you want to use a custom code page that is not in the official CCSID list? Is it supported in z/OS Connect EE? Where should you start?
+
+Here are the answers!
+
+As of V3.0.32, z/OS Connect EE is enhanced to allow you to use a custom code page when creating a CICS service. By taking several prerequisite steps, you can now specify a custom CCSID in z/OS Connect EE. These steps are used to extend the Java Runtime Environment (JRE) to support your own custom character encoding with your own CharsetProvider and Charset classes.
+
+## Prerequisites
+- z/OS Connect Enterprise Edition is installed and a z/OS Connect EE instance has been created and configured with the CICS Service Provider and the API Requester function.
+- CICS Transaction Server v5.2 or later
+- The CICS region is running and configured to access z/OS Connect EE to call APIs.
+- Enterprise COBOL Compiler
+- Refer to Coded character set identifiers to check whether the code page that you want to use is supported in z/OS® Connect EE by default. Specify a custom CCSID only when you have a specific requirement for it.
+
+## Define and Install CICS Resources 
+- Clone the repository ``` git clone git@github.com:zhenzhenclaire zosconnect-usernamed-codepage.git```
+- Allocate a PDS with 30 tracks for the jobs and sample source files.
+
+- Upload the following source and sample JCLs to your z/OS system and store on the PDS that was allocated.
+
+- Customize the uploaded copy of compile.jcl for your environment and submit to compile the sample CICS COBOL program. The load module should be installed on a PDSE library that is accessible to the CICS region. Additional instructions are provided in the sample JCL. The expected return code is 0.
+
+- Customize the uploaded copy of vsam.jcl for your environment and submit to define the VSAM data set used by the CICS program. Additional instructions are provided in the sample JCL. The expected return code is 0.
+
+- Customize the uploaded copy of ciscdefn.jcl for your environment and submit to define the CICS resources. Additional instructions are provided in the sample JCL. The expected return code is 0.
+
+## Configuring z/OS Connect EE Resources
+- Create the following directories (if not done yet) called resources/zosconnect/services and resources/zosconnect/apis under your server path.
+
+```shell
+/var/zosconnect/servers/<server-name>/resources/zosconnect/services
+/var/zosconnect/servers/<server-name>/resources/zosconnect/apis
+```
+
+- Recursively chown and chmod the output directories so your z/OS Connect server ID has access to them.
+```shell
+cd /var/zosconnect/servers/<server-name>
+chown -R <serverID>:<serverGroup> ./resources
+chmod -R 750 ./resources
+```
+
+- Setup definitions for the CICS IPIC connection in server.xml. The server.xml should have the following entries added.
+```shell
+<zosconnect_cicsIpicConnection id="zconipic"
+	 host="<hostname>"
+	 port="<portnum>"/>
+```
+
+## Deploying the custom CharsetProvideer JAR file to JRE
+1. Copy the JAR file(zosconnectUsernamedCodepage.jar) to the z/OS Connect EE runtime JRE extend directory, for example, ```$ZCEERUNTIME_JRE_Location/jre/lib/ext```.
+2. Depending on which toolkit that you use to generate the service archive (.sar), copy the JAR file to the corresponding JRE extend directory.
+    - If you use the API toolkit, ensure the JAR file is deployed to the API toolkit JRE extend directory, for example, `$ZOSExplorer_Install_Location/jdk/jre/lib/ext`.
+    - If you use the build toolkit, ensure the JAR file is deployed to the build toolkit JRE extend directory, for example, `$BUILDTOOLKIT_JRE_Location/jre/lib/ext`.
+
+## Generating and Deploying .sar file to z/OS Connect EE Server.
+This repository includes the sample API (cicsClaimsAPI.aar) and service (CICSClaimsService.sar) archive files.
+Follow the steps below to deploy the included archive files:
+- To deploy the sample service (CICSClaimsService.sar), follow the steps described in the Automated service archive management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
+- To deploy the sample API (cicsClaimsAPI.aar), follow the steps described in the Automated API management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
+
+Follow the steps below to generate and deploy from the sample projects / source provided:
+- On your IBM Explorer for z/OS (or any of the supported Eclipse environment), click on File -> Import then click on General -> Existing Projects into Workspace. Select the CICSClaimsServiceProject.zip file included in the package (confirm that the CICSClaimsService project is selected under the Projects field) and click Finish. Repeat the same steps for CICSClaimsAPIProject.zip (confirm that the CICSClaimsAPI project is selected under the Projects field).
+
+- To deploy the service from the API Toolkit, follow the steps described in the Deploying a service section of the z/OS Connect EE documentation in the IBM Knowledge Center.
+
+- To deploy the API from the API Toolkit, follow the steps described in the Deploying an API in the API toolkit section of the z/OS Connect EE documentation in the IBM Knowledge Center.
+
+
+## Testing the sample API
+At this point, the sample API is now ready for testing. Start by testing the REST API that is called from the CICS application.
+
+On a browser, type the following for an **Accepted** health insurance claim:
+
+
+
+## Conclusion
+
+## Notice 
+
+## License 
+
+
+ For more information about the steps,
+see .
