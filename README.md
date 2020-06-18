@@ -14,7 +14,7 @@ As of V3.0.32, z/OS Connect EE is enhanced to allow you to use a custom code pag
 - CICS Transaction Server v5.2 or later
 - The CICS region is running and configured to access z/OS Connect EE to call APIs.
 - Enterprise COBOL Compiler
-- Refer to Coded character set identifiers to check whether the code page that you want to use is supported in z/OS® Connect EE by default. Specify a custom CCSID only when you have a specific requirement for it.
+- Refer to [Coded character set identifiers](https://www-03preprod.ibm.com/support/knowledgecenter/SS4SVW_E29022/designing/ccsid_list.html) to check whether the code page that you want to use is supported in z/OS® Connect EE by default. Specify a custom CCSID only when you have a specific requirement for it.
 
 ## Define and Install CICS Resources 
 - Clone the repository ``` git clone git@github.com:zhenzhenclaire zosconnect-usernamed-codepage.git```
@@ -29,7 +29,7 @@ As of V3.0.32, z/OS Connect EE is enhanced to allow you to use a custom code pag
 - Customize the uploaded copy of ciscdefn.jcl for your environment and submit to define the CICS resources. Additional instructions are provided in the sample JCL. The expected return code is 0.
 
 ## Configuring z/OS Connect EE Resources
-- Create the following directories (if not done yet) called resources/zosconnect/services and resources/zosconnect/apis under your server path.
+- Create the following directories (if not done yet) called **resources/zosconnect/services** and **resources/zosconnect/apis** under your server path.
 
 ```shell
 /var/zosconnect/servers/<server-name>/resources/zosconnect/services
@@ -49,6 +49,8 @@ chmod -R 750 ./resources
 	 host="<hostname>"
 	 port="<portnum>"/>
 ```
+
+**NOTE**: Change the hostname and portnum to the actual hostname and port number of the CICS region where the CICS sample program (CLAIMCI0) was installed. A sample server.xml is included in the package. If you want to use the sample server.xml file then upload it to z/OS in binary mode to keep the contents in ASCII format.
 
 ## Deploying the custom CharsetProvideer JAR file to JRE
 1. Copy the JAR file(zosconnectUsernamedCodepage.jar) to the z/OS Connect EE runtime JRE extend directory, for example, ```$ZCEERUNTIME_JRE_Location/jre/lib/ext```.
@@ -74,7 +76,6 @@ Follow the steps below to generate and deploy from the sample projects / source 
 At this point, the sample API is now ready for testing. Start by testing the REST API that is called from the CICS application.
 
 On a browser, type the following for an **Accepted** health insurance claim:
-
 
 
 ## Conclusion
