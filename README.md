@@ -11,9 +11,9 @@ As of V3.0.32, z/OS Connect EE is enhanced to allow you to use a custom code pag
 
 ## Prerequisites
 - z/OS Connect Enterprise Edition is installed and a z/OS Connect EE instance has been created and configured with the CICS Service Provider and the API Requester function.
-- CICS Transaction Server v5.2 or later
+- CICS Transaction Server v5.2 or later.
 - The CICS region is running and configured to access z/OS Connect EE to call APIs.
-- Enterprise COBOL Compiler
+- Enterprise COBOL Compiler.
 - Refer to [Coded character set identifiers](https://www-03preprod.ibm.com/support/knowledgecenter/SS4SVW_E29022/designing/ccsid_list.html) to check whether the code page that you want to use is supported in z/OS® Connect EE by default. Specify a custom CCSID only when you have a specific requirement for it.
 
 ## Define and Install CICS Resources 
@@ -43,11 +43,11 @@ compile.jcl
 vsam.jcl
 ```
 
-- Customize the uploaded copy of compile.jcl for your environment and submit to compile the sample CICS COBOL program. The load module should be installed on a PDSE library that is accessible to the CICS region. Additional instructions are provided in the sample JCL. The expected return code is 0.
+- Customize the uploaded copy of ```compile.jcl``` for your environment and submit to compile the sample CICS COBOL program. The load module should be installed on a PDSE library that is accessible to the CICS region. Additional instructions are provided in the sample JCL. The expected return code is 0.
 
-- Customize the uploaded copy of vsam.jcl for your environment and submit to define the VSAM data set used by the CICS program. Additional instructions are provided in the sample JCL. The expected return code is 0.
+- Customize the uploaded copy of ```vsam.jcl``` for your environment and submit to define the VSAM data set used by the CICS program. Additional instructions are provided in the sample JCL. The expected return code is 0.
 
-- Customize the uploaded copy of ciscdefn.jcl for your environment and submit to define the CICS resources. Additional instructions are provided in the sample JCL. The expected return code is 0.
+- Customize the uploaded copy of ```ciscdefn.jcl``` for your environment and submit to define the CICS resources. Additional instructions are provided in the sample JCL. The expected return code is 0.
 
 ## Configuring z/OS Connect EE Resources
 - Create the following directories (if not done yet) called **resources/zosconnect/services** and **resources/zosconnect/apis** under your server path.
@@ -92,22 +92,20 @@ A sample JAR file supporting CCSID(99999) is provided in this scenario.
 ## Generating and Deploying .sar file to z/OS Connect EE Server
 This repository includes the sample API (```cicsClaimsAPI.aar```) and service (```CICSClaimsService.sar```) archive files.
 Follow the steps below to deploy the included archive files:
-- To deploy the sample service (CICSClaimsService.sar), follow the steps described in the Automated service archive management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
-- To deploy the sample API (cicsClaimsAPI.aar), follow the steps described in the Automated API management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
+- To deploy the sample service (```CICSClaimsService.sar```), follow the steps described in the Automated service archive management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
+- To deploy the sample API (```cicsClaimsAPI.aar```), follow the steps described in the Automated API management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
 
 Follow the steps below to generate and deploy from the sample projects / source provided:
-- On your IBM Explorer for z/OS (or any of the supported Eclipse environment), click on File -> Import then click on General -> Existing Projects into Workspace. Select the CICSClaimsServiceProject.zip file included in the package (confirm that the CICSClaimsService project is selected under the Projects field) and click Finish. Repeat the same steps for CICSClaimsAPIProject.zip (confirm that the CICSClaimsAPI project is selected under the Projects field).
+- On your IBM Explorer for z/OS (or any of the supported Eclipse environment), click on File -> Import then click on General -> Existing Projects into Workspace. Select the ```CICSClaimsServiceProject.zip``` file included in the package (confirm that the CICSClaimsService project is selected under the Projects field) and click Finish. Repeat the same steps for ```CICSClaimsAPIProject.zip``` (confirm that the CICSClaimsAPI project is selected under the Projects field).
 
 - To deploy the service from the API Toolkit, follow the steps described in the Deploying a service section of the z/OS Connect EE documentation in the IBM Knowledge Center.
 
 - To deploy the API from the API Toolkit, follow the steps described in the Deploying an API in the API toolkit section of the z/OS Connect EE documentation in the IBM Knowledge Center.
 
-
 ## Testing the sample API
 At this point, the sample API is now ready for testing. Start by testing the REST API that is called from the CICS application.
 
 On a browser, type the following for an **Accepted** health insurance claim:
-
 
 ## Conclusion
 
