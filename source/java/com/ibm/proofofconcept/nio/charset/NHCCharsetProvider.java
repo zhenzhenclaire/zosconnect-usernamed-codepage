@@ -23,7 +23,8 @@ import java.util.Iterator;
  */
 public class NHCCharsetProvider extends CharsetProvider {
 	// The name of the charset we provide
-	public static final String NHC_CHARSET_NAME = "cp99999";
+	public static final String NHC_CHARSET_NAME = "Cp99999";
+	public static final String NHC_CHARSET_NO = "99999";
 
 	// A handle to the Charset object
 	private Charset nhc = null;
@@ -32,7 +33,7 @@ public class NHCCharsetProvider extends CharsetProvider {
 	 * Constructor, instantiate a Charset object and save the reference.
 	 */
 	public NHCCharsetProvider() {
-		String[] alias = new String[] { NHC_CHARSET_NAME };
+		String[] alias = new String[] { NHC_CHARSET_NAME, NHC_CHARSET_NO};
 		this.nhc = new NHCCharset(NHC_CHARSET_NAME, alias);
 	}
 

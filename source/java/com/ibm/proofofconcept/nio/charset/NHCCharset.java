@@ -18,17 +18,16 @@ public class NHCCharset extends Charset {
 	// characters and bytes.
 	Charset baseCharset;
 
-	char aBig5Char = '\uA470';// <--big5--> 小
-	char bBig5Char = '\uA7B5';// <--big5--> 孝
-	char aUnicodeChar = '\u5C0F';// <--unicode 小
-	char bUnicodeChar = '\u5B5D';// <--unicode 孝
-	Character[] big5Chars = new Character[] { '\uA470', // <--big5--> 小
+	// Original HEX
+	Character[] big5Chars = new Character[] { 
 			'\uCE5D'// <--big5--> 垚
 	};
-	Character[] fbig5Chars = new Character[] { '\uA470', // <--big5--> 小
+	// Target HEX
+	Character[] fbig5Chars = new Character[] { 
 			'\uA7B5'// <--big5--> facked 垚
 	};
-	Character[] unicodeChars = new Character[] { '\u5C0F', // <--big5--> 小
+	// Target HEX mapped unicode
+	Character[] unicodeChars = new Character[] { 
 			'\u5B5D'// <--big5--> facked 垚 big5-->A7B5 孝
 	};
 
@@ -162,7 +161,7 @@ public class NHCCharset extends Charset {
 					char inputChar = bb.getChar();
 					bb.mark();
 					int binarySearch = Arrays.binarySearch(big5Chars, inputChar);
-					if (binarySearch > 0) {
+					if (binarySearch >= 0) {
 						cb.put(unicodeChars[binarySearch]);
 						bb.mark();
 					} else {
