@@ -106,7 +106,22 @@ Follow the steps below to generate and deploy from the sample projects / source 
 At this point, the sample API is now ready for testing. Start by testing the REST API that is called from the CICS application.
 
 On a browser, type the following for an **Accepted** health insurance claim:
+http://winmvs3s.hursley.ibm.com:10354/zosConnect/services/CodePageExample?action=invoke
+```
+{
+    “CODEPAGE01”: {
+        “QUERY_CUST_NAME”: “好孝小”
+    }
+}
+```
 
+```
+{
+    “CODEPAGE01”: {
+        “QUERY_CUST_NAME”: “好垚小”
+    }
+}
+```
 ## Conclusion
 
 ## Notice 
