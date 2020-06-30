@@ -18,36 +18,13 @@ As of V3.0.32, z/OS Connect EE is enhanced to allow you to use a custom code pag
 
 ## Define and Install CICS Resources 
 - Clone the repository ``` git clone git@github.com:zhenzhenclaire zosconnect-usernamed-codepage.git```
-- Allocate a PDS with 30 tracks for the jobs and sample source files.
+- Upload the following source to your z/OS system and store on the PDS.
 ```
-Average record unit
-Primary quantity  . . 30
-Secondary quantity    5
-Directory blocks  . . 10
-Record format . . . . FB
-Record length . . . . 80
-Block size  . . . . . 27920
-Data set name type    PDS
+UCDZCEE.cbl
+UCDCPY.cpy
 ```
 
-- Upload the following source and sample JCLs to your z/OS system and store on the PDS that was allocated.
-```
-claimci0.cbl
-claiminf.cpy
-claimreq.cpy
-claimrqc.cpy
-claimrsc.cpy
-claimrsp.cpy
-cicsdefn.jcl
-compile.jcl
-vsam.jcl
-```
-
-- Customize the uploaded copy of ```compile.jcl``` for your environment and submit to compile the sample CICS COBOL program. The load module should be installed on a PDSE library that is accessible to the CICS region. Additional instructions are provided in the sample JCL. The expected return code is 0.
-
-- Customize the uploaded copy of ```vsam.jcl``` for your environment and submit to define the VSAM data set used by the CICS program. Additional instructions are provided in the sample JCL. The expected return code is 0.
-
-- Customize the uploaded copy of ```ciscdefn.jcl``` for your environment and submit to define the CICS resources. Additional instructions are provided in the sample JCL. The expected return code is 0.
+- Customize your compile job and submit to compile the sample CICS COBOL program. The load module should be installed on a PDSE library that is accessible to the CICS region. The expected return code is 0.
 
 ## Configuring z/OS Connect EE Resources
 - Create the following directories (if not done yet) called **resources/zosconnect/services** and **resources/zosconnect/apis** under your server path.
