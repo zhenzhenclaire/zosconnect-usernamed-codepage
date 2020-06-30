@@ -97,7 +97,7 @@ Below is the sample output. Note that '垚' is shown by '孝'.
 ```
 
 Below is the HEX value of CUST NAME shown in CICS. Note that 'CE5D' is '垚'.
-![hex](/media/HEX.png)
+![hex](https://github.com/zhenzhenclaire/zosconnect-usernamed-codepage/blob/master/media/HEX.png)
 ## Conclusion
 
 ## Notice 
