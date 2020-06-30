@@ -43,7 +43,7 @@ chmod -R 750 ./resources
 
 - Setup definitions for the CICS IPIC connection in server.xml. The server.xml should have the following entries added.
 ```shell
-<zosconnect_cicsIpicConnection id="zconipic"
+<zosconnect_cicsIpicConnection id="Server2Ref"
 	 host="<hostname>"
 	 port="<portnum>"/>
 ```
