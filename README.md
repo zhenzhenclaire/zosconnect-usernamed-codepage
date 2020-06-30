@@ -73,7 +73,7 @@ Follow the steps below to deploy the included archive files:
 - To deploy the sample API (```CodePageAPIExample.aar```), follow the steps described in the Automated API management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
 
 Follow the steps below to generate and deploy from the sample projects / source provided:
-- On your IBM Explorer for z/OS (or any of the supported Eclipse environment), click on File -> Import then click on General -> Existing Projects into Workspace. Select the ```CICSClaimsServiceProject.zip``` file included in the package (confirm that the CICSClaimsService project is selected under the Projects field) and click Finish. Repeat the same steps for ```CICSClaimsAPIProject.zip``` (confirm that the CICSClaimsAPI project is selected under the Projects field).
+- On your IBM Explorer for z/OS (or any of the supported Eclipse environment), click on File -> Import then click on General -> Existing Projects into Workspace. Select the ```CICSCodepageProject.zip``` file included in the package (confirm that the CodePageExample and CodePageAPIExample projects are selected under the Projects field) and click Finish. 
 
 - To deploy the service from the API Toolkit, follow the steps described in the Deploying a service section of the z/OS Connect EE documentation in the IBM Knowledge Center.
 
@@ -84,7 +84,7 @@ At this point, the sample API is now ready for testing. Start by testing the RES
 
 To test the API using curl, type the following:
 ```
-curl -X POST --header ‘Content-Type: application/json’ --header ‘Accept: application/json’ -d ‘{“CODEPAGE01”:{“QUERY_CUST_NAME”:“好垚小“}}’ ‘http://winmvs3s.hursley.ibm.com:10354/codepageapiexample/service’
+curl -X POST --header ‘Content-Type: application/json’ --header ‘Accept: application/json’ -d ‘{“CODEPAGE01”:{“QUERY_CUST_NAME”:“好垚小“}}’ ‘http://<zcee server host>:<zcee server port>/codepageapiexample/service’
 ```
 
 Below is the sample output. Note that '垚' is shown by '孝'.
@@ -96,7 +96,7 @@ Below is the sample output. Note that '垚' is shown by '孝'.
 }
 ```
 
-Below is the HEX value of CUST NAME in CICS. Note that the actual value in the response is still 'CE5D', which means '垚'.
+Below is the HEX value of CUST NAME in CICS. Note that the actual value in the response is still '垚' (HEX value of '垚' is 'CE5D').
 ![hex](https://raw.githubusercontent.com/zhenzhenclaire/zosconnect-usernamed-codepage/master/media/HEX.png)
 ## Conclusion
 
