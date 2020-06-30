@@ -67,10 +67,10 @@ A sample JAR file supporting CCSID(99999) is provided in this scenario.
     - If you use the build toolkit, ensure the JAR file is deployed to the build toolkit JRE extend directory, for example, `$BUILDTOOLKIT_JRE_Location/jre/lib/ext`.
 
 ## Generating and Deploying .sar file to z/OS Connect EE Server
-This repository includes the sample API (```cicsClaimsAPI.aar```) and service (```CICSClaimsService.sar```) archive files.
+This repository includes the sample API (```CodePageAPIExample.aar```) and service (```CodePageExample.sar```) archive files.
 Follow the steps below to deploy the included archive files:
-- To deploy the sample service (```CICSClaimsService.sar```), follow the steps described in the Automated service archive management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
-- To deploy the sample API (```cicsClaimsAPI.aar```), follow the steps described in the Automated API management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
+- To deploy the sample service (```CodePageExample.sar```), follow the steps described in the Automated service archive management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
+- To deploy the sample API (```CodePageAPIExample.aar```), follow the steps described in the Automated API management section of the z/OS Connect EE documentation in the IBM Knowledge Center. If transferring the file via ftp, ensure the file is transferred as binary.
 
 Follow the steps below to generate and deploy from the sample projects / source provided:
 - On your IBM Explorer for z/OS (or any of the supported Eclipse environment), click on File -> Import then click on General -> Existing Projects into Workspace. Select the ```CICSClaimsServiceProject.zip``` file included in the package (confirm that the CICSClaimsService project is selected under the Projects field) and click Finish. Repeat the same steps for ```CICSClaimsAPIProject.zip``` (confirm that the CICSClaimsAPI project is selected under the Projects field).
@@ -82,8 +82,12 @@ Follow the steps below to generate and deploy from the sample projects / source 
 ## Testing the sample API
 At this point, the sample API is now ready for testing. Start by testing the REST API that is called from the CICS application.
 
-On a browser, type the following for an **Accepted** health insurance claim:
-http://winmvs3s.hursley.ibm.com:10354/zosConnect/services/CodePageExample?action=invoke
+To test the API using curl, type the following:
+```
+curl -X POST --header ‘Content-Type: application/json’ --header ‘Accept: application/json’ -d ‘{“CODEPAGE01”:{“QUERY_CUST_NAME”:“好垚小“}}’ ‘http://winmvs3s.hursley.ibm.com:10354/codepageapiexample/service’
+```
+
+Below is the sample output. Note that '垚' is shown by '孝'.
 ```
 {
     “CODEPAGE01”: {
@@ -92,13 +96,6 @@ http://winmvs3s.hursley.ibm.com:10354/zosConnect/services/CodePageExample?action
 }
 ```
 
-```
-{
-    “CODEPAGE01”: {
-        “QUERY_CUST_NAME”: “好垚小”
-    }
-}
-```
 ## Conclusion
 
 ## Notice 
