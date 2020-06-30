@@ -19,16 +19,13 @@ public class NHCCharset extends Charset {
 	Charset baseCharset;
 
 	// Original HEX
-	Character[] big5Chars = new Character[] { 
-			'\uCE5D'// <--big5--> 垚
+	Character[] big5Chars = new Character[] { '\uCE5D'// <--big5--> 垚
 	};
 	// Target HEX
-	Character[] fbig5Chars = new Character[] { 
-			'\uA7B5'// <--big5--> facked 垚
+	Character[] fbig5Chars = new Character[] { '\uA7B5'// <--big5--> facked 垚
 	};
 	// Target HEX mapped unicode
-	Character[] unicodeChars = new Character[] { 
-			'\u5B5D'// <--big5--> facked 垚 big5-->A7B5 孝
+	Character[] unicodeChars = new Character[] { '\u5B5D'// <--big5--> facked 垚 big5-->A7B5 孝
 	};
 
 	/**
@@ -100,28 +97,49 @@ public class NHCCharset extends Charset {
 		 */
 		@Override
 		protected CoderResult encodeLoop(CharBuffer cb, ByteBuffer bb) {
-			CoderResult cr;
+			CoderResult cr = null;
+			Charset commonCharset = Charset.forName("big5");
 
 			do {
-				while (cb.hasRemaining()) {
-					// Peek at the character at the current input position
-					char inputChar = cb.charAt(0);
-					for (int i = 0; i < unicodeChars.length; i++) {
-						if (unicodeChars[i] == inputChar) {
-							// Consume this character - i.e. move the position
-							inputChar = cb.get();
-							bb.putChar(big5Chars[i]);
-							break;
-						}
+				boolean ucdFlag = false;
+				CharBuffer cbpForFlag = cb.duplicate();
+				// Big5 result
+				char cb1InputChar = cbpForFlag.get();
+				for (int i = 0; i < unicodeChars.length; i++) {
+					if (unicodeChars[i] == cb1InputChar) {
+						ucdFlag = true;
+						break;
 					}
 				}
-
-				// This encoder can't encode the character at this position,
-				// so get the superclass to do it
-				// Alternatively, we've gotten to the end of this buffer
-				baseEncoder.reset();
-
-				cr = baseEncoder.encode(cb, bb, cb.hasRemaining());
+				if (!ucdFlag) {
+					// if doesn't includes 垚， use big5 result
+					CharsetEncoder newEncoder = commonCharset.newEncoder();
+					newEncoder.reset();
+					cr = newEncoder.encode(cb, bb, bb.hasRemaining());
+				} else {
+					// Big5 result + replaced 垚
+					CharBuffer cbp1 = cb.duplicate();
+					ByteBuffer bb1 = commonCharset.encode(cbp1);
+					CharBuffer cb1 = commonCharset.decode(bb1);
+					while (cb.hasRemaining()) {
+						// Peek at the character at the current input position
+						char inputChar = cb.get();
+						char cb1Char = cb1.get();
+						boolean flag = false;
+						for (int i = 0; i < unicodeChars.length; i++) {
+							if (unicodeChars[i] == inputChar) {
+								// Consume this character - i.e. move the position
+								bb.putChar(big5Chars[i]);
+								flag = true;
+								break;
+							}
+						}
+						if (!flag) {
+							bb.putChar(cb1Char);
+						}
+					}
+					cr = baseEncoder.encode(cb, bb, false);
+				}
 			} while (cr.isUnmappable());
 
 			return (cr);
@@ -154,30 +172,53 @@ public class NHCCharset extends Charset {
 		 */
 		protected CoderResult decodeLoop(ByteBuffer bb, CharBuffer cb) {
 			CoderResult cr;
+			int previousPosition = -1;
+			ByteBuffer bbdp1 = bb.duplicate();
+			Charset commonCharset = Charset.forName("big5");
+			// Big5 result
+			CharBuffer s = commonCharset.decode(bbdp1);
 
 			do {
+				if (previousPosition > -1 && bb.position() == previousPosition) {
+					// If the character is unmappable in either our extension or the base encoder,
+					// then
+					// throw away the character and replace it with the replacement character from
+					// the
+					// base encoder
+					bb.get();
+					cb.put(baseDecoder.replacement());
+				}
+				previousPosition = bb.position();
+
+				bb.mark();
+				int i = 0;
 				while (bb.remaining() > 1) {
 					// Peek at the character at the current input position
 					char inputChar = bb.getChar();
-					bb.mark();
 					int binarySearch = Arrays.binarySearch(big5Chars, inputChar);
 					if (binarySearch >= 0) {
+						// replace specific char
 						cb.put(unicodeChars[binarySearch]);
-						bb.mark();
 					} else {
-						// We can't decode this character, so give up and let
-						// the super-class do it
-						bb.reset();
-						break;
+						// get char from big5 result
+						cb.put(s.get(i));
 					}
+					bb.mark();
+					i++;
 				}
 
-				baseDecoder.reset();
-
-				cr = baseDecoder.decode(bb, cb, bb.hasRemaining());
+				cr = baseDecoder.decode(bb, cb, false);
 			} while (cr.isUnmappable());
 			return (cr);
 		}
+	}
+
+	public static Character decodeUnicode(String unicode) {
+		if (!unicode.contains("\\u")) {
+			return null;
+		}
+		int data = Integer.parseInt(unicode.replace("\\u", ""), 16);
+		return (char) data;
 	}
 
 	public static byte[] charToByte(char c) {
