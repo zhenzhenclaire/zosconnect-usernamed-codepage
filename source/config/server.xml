@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="new server">
+
+	<!-- Enable features -->
+	<featureManager>
+		<feature>appSecurity-2.0</feature>
+		<feature>osgiconsole-1.0</feature>
+		<feature>zosconnect:zosconnect-2.0</feature>
+		<feature>zosconnect:cicsService-1.0</feature>
+		<feature>zosconnect:zosConnectCommands-1.0</feature>
+		<feature>ssl-1.0</feature>
+	</featureManager>
+
+	<ssl id="defaultSSLConfig" keyStoreRef="defaultKeyStore"
+		trustStoreRef="defaultTrustStore" clientAuthentication="false" />
+	<keyStore id="defaultKeyStore" password="zosConnect" />
+
+	<ssl id="localSSLConfig" keyStoreRef="defaultKeyStore"
+		trustStoreRef="localTrustStore" clientAuthentication="false" />
+
+
+	<!-- Enable Audit interceptor -->
+	<zosconnect_zosConnectManager
+		requireAuth="false" requireSecure="false" />
+
+	<!-- zosConnect APIs -->
+	<zosconnect_zosConnectAPIs
+		updateTrigger="polled" pollingRate="5s" />
+
+	<!-- zosConnect Services -->
+	<zosconnect_services updateTrigger="polled"
+		pollingRate="5s" />
+
+	<!-- applicationMonitor is not applicable for zCEE servers -->
+	<applicationMonitor updateTrigger="disabled"
+		dropinsEnabled="false" />
+
+	<!-- To access this server from a remote client add a host attribute to 
+		the following element, e.g. host="*" -->
+	<httpEndpoint id="defaultHttpEndpoint" host="*"
+		httpPort="10354" httpsPort="10355" />
+
+	<com.ibm.zosconnect.reference.service
+		id="refService" configParm="configValue" />
+
+	<zosconnect_cicsIpicConnection
+		id="Server2Ref" host="winmvs3s.hursley.ibm.com" port="10350" />
+	<logging
+		traceSpecification="zosConnect=all:zosConnectApiRequester=all"></logging>
+</server>
