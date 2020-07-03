@@ -26,6 +26,6 @@ notifications:
   slack: ibm-systems-z:xNhUAzcZrx4ICLyYq3GDBanq
   email:
     recipients:
-      - dongcc@cn.ibm.com
+      - zzzzhen@cn.ibm.com
     on_success: never # default: change
     on_failure: never # default: always
