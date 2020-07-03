@@ -1,0 +1,31 @@
+sudo: true
+language: java
+
+before_install:
+- chmod -R +x buildScripts
+
+install:
+- echo do nothing
+
+#after_install: 
+#- kubectl get pods
+
+script:
+- echo do nothing...
+
+#after_script:
+
+deploy:
+- provider: script
+  skip_cleanup: true
+  on:
+    branch: master
+  script: buildScripts/sleep.sh 3
+
+notifications:
+  slack: ibm-systems-z:xNhUAzcZrx4ICLyYq3GDBanq
+  email:
+    recipients:
+      - dongcc@cn.ibm.com
+    on_success: never # default: change
+    on_failure: never # default: always
